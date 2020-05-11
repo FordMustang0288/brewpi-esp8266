@@ -8,21 +8,16 @@
 
 
 #define SPIFFS_controlConstants_fname "/controlConstants.json"
+#define SPIFFS_controlSettings_fname "/controlSettings.json"
 
 // These structs were moved from TempControl.h
-struct ControlSettings {
-	temperature beerSetting;
-	temperature fridgeSetting;
-	temperature heatEstimator; // updated automatically by self learning algorithm
-	temperature coolEstimator; // updated automatically by self learning algorithm
-    char mode;
-};
+
 
 
 class JSONSaveable {
 protected:
-    void writeJsonToFile(const char *filename, const JsonDocument& json_doc);
-    DynamicJsonDocument readJsonFromFile(const char*filename);
+    static void writeJsonToFile(const char *filename, const JsonDocument& json_doc);
+    static DynamicJsonDocument readJsonFromFile(const char*filename);
 
 };
 
@@ -58,8 +53,8 @@ public:
     char tempFormat;
 
     DynamicJsonDocument toJson();
-    void storeConstants();
-    void loadConstants();
+    void storeToSpiffs();
+    void loadFromSpiffs();
     void setDefaults();
 
 
@@ -69,6 +64,22 @@ private:
 };
 
 
+struct ControlSettings : public JSONSaveable {
+public:
+    ControlSettings();
+
+    temperature beerSetting;
+    temperature fridgeSetting;
+    temperature heatEstimator; // updated automatically by self learning algorithm
+    temperature coolEstimator; // updated automatically by self learning algorithm
+    char mode;
+
+    DynamicJsonDocument toJson();
+    void storeToSpiffs();
+    void loadFromSpiffs();
+    void setDefaults();
+
+};
 
 
 

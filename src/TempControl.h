@@ -124,13 +124,13 @@ public:
 	TEMP_CONTROL_METHOD void updateOutputs(void);
 	TEMP_CONTROL_METHOD void detectPeaks(void);
 	
-	TEMP_CONTROL_METHOD void loadSettings(eptr_t offset);
-	TEMP_CONTROL_METHOD void storeSettings(eptr_t offset);
-	TEMP_CONTROL_METHOD void loadDefaultSettings(void);
+	TEMP_CONTROL_METHOD void loadSettings();
+	TEMP_CONTROL_METHOD void storeSettings();
+	TEMP_CONTROL_METHOD void loadDefaultSettings();
 	
 	TEMP_CONTROL_METHOD void loadConstants();
 	TEMP_CONTROL_METHOD void storeConstants();
-	TEMP_CONTROL_METHOD void loadDefaultConstants(void);
+	TEMP_CONTROL_METHOD void loadDefaultConstants();
 	
 	//TEMP_CONTROL_METHOD void loadSettingsAndConstants(void);
 		
