@@ -4,6 +4,10 @@
 #include "DallasTemperature.h"	// for DeviceAddress
 #endif
 
+#include <ArduinoJson.h>
+
+
+#define SPIFFS_controlConstants_fname "/controlConstants.json"
 
 // These structs were moved from TempControl.h
 struct ControlSettings {
@@ -15,33 +19,56 @@ struct ControlSettings {
 };
 
 
-struct ControlConstants {
-	temperature tempSettingMin;
-	temperature tempSettingMax;
-	temperature Kp;
-	temperature Ki;
-	temperature Kd;
-	temperature iMaxError;
-	temperature idleRangeHigh;
-	temperature idleRangeLow;
-	temperature heatingTargetUpper;
-	temperature heatingTargetLower;
-	temperature coolingTargetUpper;
-	temperature coolingTargetLower;
-	uint16_t maxHeatTimeForEstimate; // max time for heat estimate in seconds
-	uint16_t maxCoolTimeForEstimate; // max time for heat estimate in seconds
-									 // for the filter coefficients the b value is stored. a is calculated from b.
-	uint8_t fridgeFastFilter;	// for display, logging and on-off control
-	uint8_t fridgeSlowFilter;	// for peak detection
-	uint8_t fridgeSlopeFilter;	// not used in current control algorithm
-	uint8_t beerFastFilter;	// for display and logging
-	uint8_t beerSlowFilter;	// for on/off control algorithm
-	uint8_t beerSlopeFilter;	// for PID calculation
-	uint8_t lightAsHeater;		// use the light to heat rather than the configured heater device
-	uint8_t rotaryHalfSteps; // define whether to use full or half steps for the rotary encoder
-	temperature pidMax;
-    char tempFormat;
+class JSONSaveable {
+protected:
+    void writeJsonToFile(const char *filename, const JsonDocument& json_doc);
+    DynamicJsonDocument readJsonFromFile(const char*filename);
+
 };
+
+
+class ControlConstants : public JSONSaveable {
+public:
+    ControlConstants();
+
+    temperature tempSettingMin;
+    temperature tempSettingMax;
+    temperature Kp;
+    temperature Ki;
+    temperature Kd;
+    temperature iMaxError;
+    temperature idleRangeHigh;
+    temperature idleRangeLow;
+    temperature heatingTargetUpper;
+    temperature heatingTargetLower;
+    temperature coolingTargetUpper;
+    temperature coolingTargetLower;
+    uint16_t maxHeatTimeForEstimate; // max time for heat estimate in seconds
+    uint16_t maxCoolTimeForEstimate; // max time for heat estimate in seconds
+    // for the filter coefficients the b value is stored. a is calculated from b.
+    uint8_t fridgeFastFilter;	// for display, logging and on-off control
+    uint8_t fridgeSlowFilter;	// for peak detection
+    uint8_t fridgeSlopeFilter;	// not used in current control algorithm
+    uint8_t beerFastFilter;	// for display and logging
+    uint8_t beerSlowFilter;	// for on/off control algorithm
+    uint8_t beerSlopeFilter;	// for PID calculation
+    uint8_t lightAsHeater;		// use the light to heat rather than the configured heater device
+    uint8_t rotaryHalfSteps; // define whether to use full or half steps for the rotary encoder
+    temperature pidMax;
+    char tempFormat;
+
+    DynamicJsonDocument toJson();
+    void storeConstants();
+    void loadConstants();
+    void setDefaults();
+
+
+
+private:
+
+};
+
+
 
 
 

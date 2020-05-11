@@ -110,7 +110,7 @@ enum states{
  */
 
 class TempControl{
-	public:
+public:
 	
 	TempControl(){};
 	~TempControl(){};
@@ -128,8 +128,8 @@ class TempControl{
 	TEMP_CONTROL_METHOD void storeSettings(eptr_t offset);
 	TEMP_CONTROL_METHOD void loadDefaultSettings(void);
 	
-	TEMP_CONTROL_METHOD void loadConstants(eptr_t offset);
-	TEMP_CONTROL_METHOD void storeConstants(eptr_t offset);
+	TEMP_CONTROL_METHOD void loadConstants();
+	TEMP_CONTROL_METHOD void storeConstants();
 	TEMP_CONTROL_METHOD void loadDefaultConstants(void);
 	
 	//TEMP_CONTROL_METHOD void loadSettingsAndConstants(void);
@@ -191,12 +191,12 @@ class TempControl{
 		return isDoorOpen() ? DOOR_OPEN : getState();
 	}
 
-	private:
+private:
 	TEMP_CONTROL_METHOD void increaseEstimator(temperature * estimator, temperature error);
 	TEMP_CONTROL_METHOD void decreaseEstimator(temperature * estimator, temperature error);
 	
 	TEMP_CONTROL_METHOD void updateEstimatedPeak(uint16_t estimate, temperature estimator, uint16_t sinceIdle);
-	public:
+public:
 	TEMP_CONTROL_FIELD TempSensor* beerSensor;
 	TEMP_CONTROL_FIELD TempSensor* fridgeSensor;
 	TEMP_CONTROL_FIELD BasicTempSensor* ambientSensor;
@@ -212,10 +212,8 @@ class TempControl{
 	TEMP_CONTROL_FIELD ControlSettings cs;
 	TEMP_CONTROL_FIELD ControlVariables cv;
 	
-	// Defaults for control constants. Defined in cpp file, copied with memcpy_p
-	static const ControlConstants ccDefaults;
-			
-	private:
+
+private:
 	// keep track of beer setting stored in EEPROM
 	TEMP_CONTROL_FIELD temperature storedBeerSetting;
 

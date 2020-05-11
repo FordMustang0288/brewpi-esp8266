@@ -20,6 +20,8 @@
 
 #pragma once
 
+//#include <ArduinoJson.h>
+
 #include "Brewpi.h"
 #include "TemperatureFormats.h"
 #include "DeviceManager.h"
@@ -33,7 +35,7 @@ class DeviceConfig;
 
 
 class PiLink{
-	public:
+public:
 	
 	// There can only be one PiLink object, so functions are static
 	static void init(void);
@@ -54,7 +56,7 @@ class PiLink{
 
 	static int read(void);  // Adding so we can completely abstract away piStream outside of piLink
 
-	private:
+private:
 	
 	static void sendControlSettings(void);
 	static void receiveControlConstants(void);
@@ -64,15 +66,19 @@ class PiLink{
 	static void receiveJson(void); // receive settings as JSON key:value pairs
 	
 	static void print(char *fmt, ...); // use when format string is stored in RAM
-#ifdef ARDUINO
-	static void print(char c)       // inline for arduino
+
+
 #if !defined(ESP8266) && !defined(ESP32)
-	{ Serial.print(c); }
+    static void print(char c) { Serial.print(c); } // inline for arduino
 #else
-		;
-#endif
+    static void print(char c);       // inline for arduino
 #endif
 
+//public:  // Public so this can be accessed by ArduinoJson
+//    size_t write(char c);
+//    size_t write(const uint8_t *buffer, size_t length);
+//
+//private:
 	static void test_functionality(void);
 	static void print_P(const char *fmt, ...); // use when format string is stored in PROGMEM with PSTR("string")
 	static void printNewLine(void);
@@ -111,6 +117,7 @@ private:
 	};
 	typedef void (*JsonOutputHandler)(const char* key, uint8_t offset);
 	static void sendJsonValues(char responseType, const JsonOutput* /*PROGMEM*/ jsonOutputMap, uint8_t mapCount);
+//    static void sendJsonValuesAJ(char responseType, const DynamicJsonDocument& json_doc);
 
 
 	// handler functions for JSON output
@@ -150,7 +157,7 @@ private:
 	static void printDouble(double val);
 #endif	
 
-	private:
+private:
 	static bool firstPair;
 	friend class DeviceManager;
 	friend class PiLinkTest;
